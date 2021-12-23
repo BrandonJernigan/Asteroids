@@ -1,8 +1,14 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Player.h"
 
-int main() {
+
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
+
+int main()
+{
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG);
 
@@ -10,18 +16,13 @@ int main() {
             "Asteroids C++",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            1024,
-            768,
+            SCREEN_WIDTH,
+            SCREEN_HEIGHT,
             SDL_WINDOW_OPENGL);
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
-    SDL_Surface *img = IMG_Load("sprites/title.png");
-    if (img == NULL)
-    {
-        std::cout << "Error loading bmp image: " << SDL_GetError();
-    }
-    SDL_Texture *tex = SDL_CreateTextureFromSurface(renderer, img);
+    auto *player = new Player(renderer);
 
     SDL_Event event;
     bool quit = false;
@@ -39,15 +40,11 @@ int main() {
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-        SDL_Rect srect = {0, 0, 548, 353};
-        SDL_Rect dsrect = {100, 100, 548, 353};
-        SDL_RenderCopy(renderer, tex, &srect, &dsrect);
+        player->draw();
 
         SDL_RenderPresent(renderer);
     }
 
-    SDL_FreeSurface(img);
-    SDL_DestroyTexture(tex);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 
