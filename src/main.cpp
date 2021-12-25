@@ -41,6 +41,7 @@ int main()
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
         player->draw();
+        player->update();
 
         SDL_RenderPresent(renderer);
     }
