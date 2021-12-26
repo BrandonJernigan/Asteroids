@@ -23,12 +23,19 @@ Player::Player(SDL_Renderer *renderer)
     SDL_GetRendererOutputSize(this->renderer, &screenW, &screenH);
     this->xPos = ((float)screenW - this->width) / 2.0f;
     this->yPos = ((float)screenH - this->height) / 2.0f;
-    this->xVel = 0.0f;
-    this->yVel = 0.0f;
+    this->xVel, this->yVel = 0.0f;
 
     this->thrusting = false;
     this->idleTex =  Utilities::loadTexture(renderer, "sprites/player-idle.png");
     this->thrustingTex = Utilities::loadTexture(renderer, "sprites/player-thrusting.png");
+
+    for(auto & i : this->bullets)
+    {
+        auto *bullet = new Bullet(renderer);
+        i = bullet;
+    }
+
+    this->lastShotTime = sclock::now() - COOLDOWN;
 }
 
 void Player::draw()
@@ -56,6 +63,33 @@ void Player::draw()
             this->rAngle,
             &this->center,
             SDL_FLIP_NONE);
+
+    for(auto b : bullets)
+    {
+        if(b->active)
+        {
+            b->draw();
+        }
+    }
+}
+
+void Player::shoot()
+{
+    if(lastShotTime + COOLDOWN <= sclock::now())
+    {
+        for(auto b : bullets)
+        {
+            if (!b->active)
+            {
+                b->xPos = this->xPos;
+                b->yPos = this->yPos;
+                b->rAngle = this->rAngle;
+                b->active = true;
+                lastShotTime = sclock::now();
+                break;
+            }
+        }
+    }
 }
 
 void Player::update() {
@@ -72,6 +106,11 @@ void Player::update() {
     if (this->rAngle >= 360 || this->rAngle <= -360)
     {
         this->rAngle = 0.0f;
+    }
+
+    if (state[SDL_SCANCODE_SPACE])
+    {
+        this->shoot();
     }
 
     if (state[SDL_SCANCODE_W]) {
@@ -100,6 +139,11 @@ void Player::update() {
     if(this->yPos >= (720 + this->height))
     {
         this->yPos = 0;
+    }
+
+    for(auto b : bullets)
+    {
+        b->update();
     }
 }
 

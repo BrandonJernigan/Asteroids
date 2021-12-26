@@ -6,14 +6,19 @@
 #define ASTEROIDS_CPP_PLAYER_H
 
 
+#include <chrono>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Bullet.h"
 #include "Utilities.h"
 
 
 const float R_SPEED = 0.1f;
 const float T_SPEED = 0.02f;
-const float RADIAN_EQ = 0.0174533;
+const auto COOLDOWN = std::chrono::milliseconds(500);
+
+
+using sclock = std::chrono::system_clock;
 
 
 class Player {
@@ -39,8 +44,13 @@ private:
 
     // State
     bool thrusting;
+    Bullet *bullets[30];
     SDL_Texture *idleTex;
     SDL_Texture *thrustingTex;
+    sclock::time_point lastShotTime;
+
+    // Actions
+    void shoot();
 };
 
 
