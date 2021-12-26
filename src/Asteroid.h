@@ -6,6 +6,7 @@
 #define ASTEROIDS_CPP_ASTEROID_H
 
 
+#include <random>
 #include <SDL.h>
 #include "GameObject.h"
 #include "Utilities.h"
@@ -14,6 +15,7 @@
 class Asteroid : public GameObject {
 public:
     Asteroid(SDL_Renderer *renderer);
+    Asteroid(SDL_Renderer *renderer, float xPos, float yPos, float xVel, float yVel);
     ~Asteroid();
 
     int phase;
@@ -24,7 +26,10 @@ public:
 
 private:
     float rVel;
+    SDL_Texture *phaseOneTex{};
+    SDL_Texture *phaseTwoTex;
 
+    void checkBounds();
 };
 
 

@@ -10,9 +10,21 @@ Game::Game(SDL_Renderer *renderer)
     this->player = new Player(this->renderer);
     this->gameObjects.push_back(player);
 
-    auto *asteroid = new Asteroid(renderer);
-    this->gameObjects.push_back(asteroid);
-    this->asteroids.push_back(asteroid);
+    for (int i = 0; i < 5; i++)
+    {
+        auto *asteroid = new Asteroid(renderer);
+        this->gameObjects.push_back(asteroid);
+        this->asteroids.push_back(asteroid);
+    }
+
+    for (auto asteroid : this->asteroids)
+    {
+        if (checkAsteroidPositions(asteroid))
+        {
+            asteroid->xPos -= 100;
+            asteroid->yPos -= 100;
+        }
+    }
 
     this->collisionTexture = Utilities::loadTexture(renderer, "sprites/collision.png");
 }
@@ -41,6 +53,64 @@ void Game::update()
     this->checkCollisions();
 }
 
+void Game::checkCollisions()
+{
+    for (auto bullet : player->bullets)
+    {
+        for (auto asteroid : this->asteroids)
+        {
+            if (bullet->active && asteroid->active)
+            {
+                if (checkPositions(bullet, asteroid))
+                {
+                    drawCollision(asteroid);
+                    bullet->onCollision();
+                    this->handleAsteroidCollision(asteroid);
+                    return;
+                }
+            }
+        }
+    }
+
+    for (auto asteroid : this->asteroids)
+    {
+        if (asteroid->active)
+        {
+            if(checkPositions(this->player, asteroid))
+            {
+                drawCollision(asteroid);
+                this->player->onCollision();
+                this->handleAsteroidCollision(asteroid);
+                return;
+            }
+        }
+    }
+}
+
+void Game::drawCollision(GameObject *go)
+{
+    SDL_Rect srcRect = {0, 0, (int)go->width, (int)go->height};
+    SDL_FRect destRect = {go->xPos, go->yPos, go->width, go->height};
+    SDL_RenderCopyExF(
+            this->renderer,
+            this->collisionTexture,
+            &srcRect,
+            &destRect,
+            go->rAngle,
+            &go->center,
+            SDL_FLIP_NONE);
+}
+
+Game::~Game()
+{
+    for(auto object : gameObjects)
+    {
+        object = nullptr;
+    }
+    SDL_DestroyTexture(this->collisionTexture);
+    this->renderer = nullptr;
+}
+
 bool Game::checkPositions(GameObject *go1, GameObject *go2)
 {
     bool xCondition1 = go1->xPos >= go2->xPos;
@@ -58,59 +128,75 @@ bool Game::checkPositions(GameObject *go1, GameObject *go2)
     return false;
 }
 
-void Game::drawCollision(GameObject *go)
+bool Game::checkAsteroidPositions(Asteroid *asteroid)
 {
-    SDL_Rect srcRect = {0, 0, (int)go->width, (int)go->height};
-    SDL_FRect destRect = {go->xPos, go->yPos, go->width, go->height};
-    SDL_RenderCopyExF(
-            this->renderer,
-            this->collisionTexture,
-            &srcRect,
-            &destRect,
-            go->rAngle,
-            &go->center,
-            SDL_FLIP_NONE);
-}
-
-void Game::checkCollisions()
-{
-    for (auto bullet : player->bullets)
+    bool xCondition1 = this->player->xPos >= (asteroid->xPos - 100);
+    bool xCondition2 = this->player->xPos <= (asteroid->xPos + asteroid->width + 100);
+    if (xCondition1 && xCondition2)
     {
-        for (auto asteroid : this->asteroids)
+        bool yCondition1 = this->player->yPos >= (asteroid->yPos - 100);
+        bool yCondition2 = this->player->yPos <= (asteroid->xPos + asteroid->height + 100);
+        if (yCondition1 && yCondition2)
         {
-            if (bullet->active && asteroid->active)
-            {
-                if (checkPositions(bullet, asteroid))
-                {
-                    drawCollision(asteroid);
-                    bullet->onCollision();
-                    asteroid->onCollision();
-                    return;
-                }
-            }
+            return true;
         }
     }
 
-    for (auto asteroid : this->asteroids)
+    return false;
+}
+
+int Game::findGameObjectIndex(GameObject *go)
+{
+    auto item = std::find(this->gameObjects.begin(), this->gameObjects.end(), go);
+    if (item != this->gameObjects.end())
     {
-        if (asteroid->active)
-        {
-            if(checkPositions(this->player, asteroid))
-            {
-                drawCollision(asteroid);
-                this->player->onCollision();
-                asteroid->onCollision();
-                return;
-            }
-        }
+        return (int)(item - this->gameObjects.begin());
+    }
+    else
+    {
+        return -1;
     }
 }
 
-Game::~Game()
+int Game::findAsteroidIndex(Asteroid *asteroid)
 {
-    for(auto object : gameObjects)
+    auto item = std::find(
+            this->asteroids.begin(),
+            this->asteroids.end(),
+            asteroid);
+
+    if (item != this->asteroids.end())
     {
-        object = nullptr;
+        return (int)(item - this->asteroids.begin());
     }
-    this->renderer = nullptr;
+    else
+    {
+        return -1;
+    }
+}
+
+void Game::handleAsteroidCollision(Asteroid *asteroid)
+{
+    if (asteroid->phase == 2)
+    {
+        asteroid->onCollision();
+        int goIndex = this->findGameObjectIndex(asteroid);
+        int aIndex = this->findAsteroidIndex(asteroid);
+
+        this->gameObjects.erase(this->gameObjects.begin() + goIndex);
+        this->asteroids.erase(this->asteroids.begin() + aIndex);
+
+        return;
+    }
+
+    asteroid->onCollision();
+    auto *oppAsteroid = new Asteroid(
+            renderer,
+            asteroid->xPos,
+            asteroid->yPos,
+            -asteroid->xVel,
+            -asteroid->yVel);
+
+    this->asteroids.push_back(oppAsteroid);
+    this->gameObjects.push_back(oppAsteroid);
 }

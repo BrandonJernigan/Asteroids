@@ -6,6 +6,7 @@
 #define ASTEROIDS_CPP_GAME_H
 
 
+#include <iostream>
 #include <vector>
 #include <SDL.h>
 #include "GameObject.h"
@@ -30,9 +31,15 @@ private:
     std::vector<GameObject*> gameObjects;
     std::vector<Asteroid*> asteroids;
 
-    bool checkPositions(GameObject *go1, GameObject *go2);
     void checkCollisions();
     void drawCollision(GameObject *go);
+
+    // helper methods
+    bool checkPositions(GameObject *go1, GameObject *go2);
+    bool checkAsteroidPositions(Asteroid *asteroid);
+    int findGameObjectIndex(GameObject *go);
+    int findAsteroidIndex(Asteroid *asteroid);
+    void handleAsteroidCollision(Asteroid *asteroid);
 };
 
 

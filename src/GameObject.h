@@ -21,6 +21,9 @@ public:
     // position
     float xPos{}, yPos{};
 
+    // movement
+    float xVel{}, yVel{};
+
     // Size
     float width{}, height{};
     SDL_FPoint center{};
@@ -35,9 +38,6 @@ public:
 protected:
     SDL_Renderer *renderer{};
     SDL_Texture *texture{};
-
-    // movement
-    float xVel{}, yVel{};
 };
 
 

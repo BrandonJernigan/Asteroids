@@ -15,7 +15,7 @@
 
 
 const float R_SPEED = 0.1f;
-const float T_SPEED = 0.02f;
+const float T_SPEED = 0.08f;
 const auto COOLDOWN = std::chrono::milliseconds(500);
 
 
