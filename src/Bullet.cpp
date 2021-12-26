@@ -6,23 +6,25 @@
 
 Bullet::Bullet(SDL_Renderer *renderer)
 {
+    // set object state
     this->renderer = renderer;
     this->active = false;
 
-    // Set the rotation
+    // set the rotation
     this->rAngle = 0.0f;
 
-    // Set the size and axis
+    // set the size and axis
     this->width = 24.0f;
     this->height = 28.0f;
     this->center = {this->width / 2.0f, this->height / 2.0f};
 
-    // Set the position
+    // set the position
     this->xPos = 0.0f;
     this->yPos = 0.0f;
     this->xVel = 0.0f;
     this->yVel = 0.0f;
 
+    // set the texture
     this->texture = Utilities::loadTexture(renderer, "sprites/bullet.png");
 }
 

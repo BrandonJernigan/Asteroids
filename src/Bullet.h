@@ -8,38 +8,20 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "GameObject.h"
 #include "Utilities.h"
 
 
 const float B_SPEED = 5.0f;
 
 
-class Bullet {
+class Bullet : public GameObject {
 public:
-    Bullet(SDL_Renderer *renderer);
+    explicit Bullet(SDL_Renderer *renderer);
     ~Bullet();
 
-    // State
-    bool active;
-
-    // Rotation
-    float rAngle;
-
-    // Position
-    float xPos, yPos;
-
-    void draw();
-    void update();
-
-private:
-    SDL_Renderer *renderer;
-    SDL_Texture *texture;
-
-    // Size
-    float width, height;
-    SDL_FPoint center;
-
-    float xVel, yVel;
+    void draw() override;
+    void update() override;
 };
 
 

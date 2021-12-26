@@ -9,6 +9,7 @@
 #include <chrono>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "GameObject.h"
 #include "Bullet.h"
 #include "Utilities.h"
 
@@ -21,35 +22,29 @@ const auto COOLDOWN = std::chrono::milliseconds(500);
 using sclock = std::chrono::system_clock;
 
 
-class Player {
+class Player : public GameObject {
 public:
-    Player(SDL_Renderer *renderer);
+    explicit Player(SDL_Renderer *renderer);
     ~Player();
-    void draw();
-    void update();
+
+    Bullet *bullets[30]{};
+
+    void draw() override;
+    void update() override;
 
 private:
-    SDL_Renderer *renderer;
+    float rVel;
 
-    // Rotation
-    float rAngle, rVel;
-
-    // Size
-    float width, height;
-    SDL_FPoint center;
-
-    // Position
-    float xPos, yPos;
-    float xVel, yVel;
-
-    // State
+    // state
     bool thrusting;
-    Bullet *bullets[30];
     SDL_Texture *idleTex;
     SDL_Texture *thrustingTex;
     sclock::time_point lastShotTime;
 
-    // Actions
+    void drawBullets();
+    void updateBullets();
+    void checkBounds();
+    void handleKeyEvents();
     void shoot();
 };
 
