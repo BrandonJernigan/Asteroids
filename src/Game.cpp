@@ -7,6 +7,10 @@
 Game::Game(SDL_Renderer *renderer)
 {
     this->renderer = renderer;
+    this->score = 0;
+    this->startTime = sclock::now();
+
+
     this->player = new Player(this->renderer);
     this->gameObjects.push_back(player);
 
@@ -19,7 +23,7 @@ Game::Game(SDL_Renderer *renderer)
 
     for (auto asteroid : this->asteroids)
     {
-        if (checkAsteroidPositions(asteroid))
+        if (checkAsteroidPosition(asteroid))
         {
             asteroid->xPos -= 100;
             asteroid->yPos -= 100;
@@ -66,6 +70,7 @@ void Game::checkCollisions()
                     drawCollision(asteroid);
                     bullet->onCollision();
                     this->handleAsteroidCollision(asteroid);
+                    this->score += 50;
                     return;
                 }
             }
@@ -74,6 +79,12 @@ void Game::checkCollisions()
 
     for (auto asteroid : this->asteroids)
     {
+        // delay for player collision on game start
+        if (!(this->startTime + DELAY <= sclock::now()))
+        {
+            return;
+        }
+
         if (asteroid->active)
         {
             if(checkPositions(this->player, asteroid))
@@ -128,7 +139,7 @@ bool Game::checkPositions(GameObject *go1, GameObject *go2)
     return false;
 }
 
-bool Game::checkAsteroidPositions(Asteroid *asteroid)
+bool Game::checkAsteroidPosition(Asteroid *asteroid)
 {
     bool xCondition1 = this->player->xPos >= (asteroid->xPos - 100);
     bool xCondition2 = this->player->xPos <= (asteroid->xPos + asteroid->width + 100);
@@ -185,6 +196,17 @@ void Game::handleAsteroidCollision(Asteroid *asteroid)
 
         this->gameObjects.erase(this->gameObjects.begin() + goIndex);
         this->asteroids.erase(this->asteroids.begin() + aIndex);
+
+        auto newAsteroid = new Asteroid(this->renderer);
+
+        if (checkAsteroidPosition(newAsteroid))
+        {
+            newAsteroid->xPos -= 100;
+            newAsteroid->yPos -= 100;
+        }
+
+        this->gameObjects.push_back(newAsteroid);
+        this->asteroids.push_back(newAsteroid);
 
         return;
     }

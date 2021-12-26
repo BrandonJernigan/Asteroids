@@ -6,7 +6,7 @@
 #define ASTEROIDS_CPP_GAME_H
 
 
-#include <iostream>
+#include <chrono>
 #include <vector>
 #include <SDL.h>
 #include "GameObject.h"
@@ -15,10 +15,19 @@
 #include "Asteroid.h"
 
 
+const auto DELAY = std::chrono::seconds(2);
+
+
+using sclock = std::chrono::system_clock;
+
+
 class Game {
 public:
     Game(SDL_Renderer *renderer);
     ~Game();
+
+    int score;
+    sclock::time_point startTime;
 
     void draw();
     void update();
@@ -36,7 +45,7 @@ private:
 
     // helper methods
     bool checkPositions(GameObject *go1, GameObject *go2);
-    bool checkAsteroidPositions(Asteroid *asteroid);
+    bool checkAsteroidPosition(Asteroid *asteroid);
     int findGameObjectIndex(GameObject *go);
     int findAsteroidIndex(Asteroid *asteroid);
     void handleAsteroidCollision(Asteroid *asteroid);
