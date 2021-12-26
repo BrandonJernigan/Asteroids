@@ -70,6 +70,11 @@ void Bullet::update()
     }
 }
 
+void Bullet::onCollision()
+{
+    this->active = false;
+}
+
 Bullet::~Bullet()
 {
     SDL_DestroyTexture(this->texture);

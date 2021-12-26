@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "Player.h"
+#include "Game.h"
 
 
 const int SCREEN_WIDTH = 1280;
@@ -10,6 +10,7 @@ const int SCREEN_HEIGHT = 720;
 
 int main()
 {
+    // initialize SDL {image}
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG);
 
@@ -21,15 +22,19 @@ int main()
             SCREEN_HEIGHT,
             SDL_WINDOW_OPENGL);
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+    SDL_Renderer *renderer = SDL_CreateRenderer(
+            window,
+            -1,
+            SDL_RENDERER_PRESENTVSYNC);
 
-    auto *player = new Player(renderer);
+    // the game scene
+    auto *game = new Game(renderer);
 
     SDL_Event event;
     bool quit = false;
-
     while (!quit)
     {
+        // poll for quit event
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -38,15 +43,15 @@ int main()
             }
         }
 
+        // update and draw
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-        player->draw();
-        player->update();
-
+        game->update();
+        game->draw();
         SDL_RenderPresent(renderer);
     }
 
+    // clean up
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 

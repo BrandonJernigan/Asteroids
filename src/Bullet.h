@@ -22,6 +22,7 @@ public:
 
     void draw() override;
     void update() override;
+    void onCollision() override;
 };
 
 

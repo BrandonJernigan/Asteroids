@@ -12,6 +12,6 @@ find_package(SDL2Mixer)
 
 file(COPY sprites DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-add_executable(Asteroids_Cpp src/App.cpp src/Player.cpp src/Player.h src/Utilities.cpp src/Utilities.h src/Bullet.cpp src/Bullet.h src/Game.cpp src/Game.h src/GameObject.h)
+add_executable(Asteroids_Cpp src/App.cpp src/Player.cpp src/Player.h src/Utilities.cpp src/Utilities.h src/Bullet.cpp src/Bullet.h src/Game.cpp src/Game.h src/GameObject.h src/Asteroid.cpp src/Asteroid.h)
 include_directories(${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR})
 target_link_libraries(Asteroids_Cpp ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY})

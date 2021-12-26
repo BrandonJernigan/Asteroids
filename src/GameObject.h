@@ -21,17 +21,20 @@ public:
     // position
     float xPos{}, yPos{};
 
+    // Size
+    float width{}, height{};
+    SDL_FPoint center{};
+
     // rendering
     virtual void draw(){};
     virtual void update(){};
 
+    // collision
+    virtual void onCollision(){};
+
 protected:
     SDL_Renderer *renderer{};
     SDL_Texture *texture{};
-
-    // Size
-    float width{}, height{};
-    SDL_FPoint center{};
 
     // movement
     float xVel{}, yVel{};
