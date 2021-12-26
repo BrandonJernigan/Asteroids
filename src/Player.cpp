@@ -156,6 +156,11 @@ void Player::update()
     this->updateBullets();
 }
 
+void Player::onCollision()
+{
+    this->active = false;
+}
+
 Player::~Player()
 {
     SDL_DestroyTexture(this->idleTex);

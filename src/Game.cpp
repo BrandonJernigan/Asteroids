@@ -19,9 +19,12 @@ Game::Game(SDL_Renderer *renderer)
 
 void Game::draw()
 {
-    for(auto object : gameObjects)
+    for (auto object : gameObjects)
     {
-        object->draw();
+        if (object->active)
+        {
+            object->draw();
+        }
     }
 }
 
@@ -29,7 +32,10 @@ void Game::update()
 {
     for (auto object : gameObjects)
     {
-        object->update();
+        if (object->active)
+        {
+            object->update();
+        }
     }
 
     this->checkCollisions();
@@ -81,6 +87,20 @@ void Game::checkCollisions()
                     asteroid->onCollision();
                     return;
                 }
+            }
+        }
+    }
+
+    for (auto asteroid : this->asteroids)
+    {
+        if (asteroid->active)
+        {
+            if(checkPositions(this->player, asteroid))
+            {
+                drawCollision(asteroid);
+                this->player->onCollision();
+                asteroid->onCollision();
+                return;
             }
         }
     }
