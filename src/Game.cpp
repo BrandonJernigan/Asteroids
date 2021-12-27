@@ -4,7 +4,9 @@
 
 #include "Game.h"
 
-Game::Game(SDL_Renderer *renderer)
+#include <utility>
+
+Game::Game(SDL_Renderer *renderer, std::function<void(SDL_Renderer*, int)> onDeath)
 {
     this->renderer = renderer;
     this->score = 0;
@@ -31,6 +33,7 @@ Game::Game(SDL_Renderer *renderer)
     }
 
     this->collisionTexture = Utilities::loadTexture(renderer, "sprites/collision.png");
+    this->onDeath = std::move(onDeath);
 }
 
 void Game::draw()
@@ -92,6 +95,7 @@ void Game::checkCollisions()
                 drawCollision(asteroid);
                 this->player->onCollision();
                 this->handleAsteroidCollision(asteroid);
+                this->onDeath(renderer, this->score);
                 return;
             }
         }

@@ -6,24 +6,28 @@
 #define ASTEROIDS_CPP_MENU_H
 
 
+#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "Scene.h"
 #include "Utilities.h"
 
 
-class Menu {
+class Menu : public Scene {
 public:
     Menu(SDL_Renderer *renderer);
     ~Menu();
 
-    void draw();
+    void draw() override;
 
 private:
     SDL_Renderer *renderer;
-    SDL_Texture *texture;
+    SDL_Texture *titleTexture;
+    SDL_Texture *actionTexture;
 
     int titleW, titleH;
+    int actionW, actionH;
 };
 
 

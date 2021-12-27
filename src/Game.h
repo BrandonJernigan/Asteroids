@@ -9,32 +9,30 @@
 #include <chrono>
 #include <vector>
 #include <SDL.h>
+#include "Scene.h"
 #include "GameObject.h"
-#include "Utilities.h"
 #include "Player.h"
 #include "Asteroid.h"
-
+#include "Utilities.h"
 
 const auto DELAY = std::chrono::seconds(2);
 
-
 using sclock = std::chrono::system_clock;
 
-
-class Game {
+class Game : public Scene {
 public:
-    Game(SDL_Renderer *renderer);
+    Game(SDL_Renderer *renderer, std::function<void(SDL_Renderer*, int)> onDeath);
     ~Game();
 
     int score;
     sclock::time_point startTime;
 
-    void draw();
-    void update();
+    void draw() override;
+    void update() override;
 
 private:
-    SDL_Renderer *renderer;
     SDL_Texture *collisionTexture;
+    std::function<void(SDL_Renderer*, int)> onDeath;
 
     Player *player;
     std::vector<GameObject*> gameObjects;

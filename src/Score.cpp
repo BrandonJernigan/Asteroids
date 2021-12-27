@@ -2,19 +2,26 @@
 // Created by Brandon Jernigan on 12/26/21.
 //
 
-#include "Menu.h"
+#include "Score.h"
 
-Menu::Menu(SDL_Renderer *renderer)
+Score::Score(SDL_Renderer *renderer, int score)
 {
     this->renderer = renderer;
-    this->titleW = 1085;
-    this->titleH = 297;
-    this->titleTexture = Utilities::loadTexture(renderer, "sprites/asteroids-logo.png");
-
     TTF_Font *font = TTF_OpenFont("<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf", 24);
+
+    std::string scoreString = std::string("You scored: ") + std::to_string(score);
+    SDL_Surface *scoreSurface = TTF_RenderUTF8_Solid(
+            font,
+            scoreString.data(),
+            SDL_Color{255, 255, 255, 255});
+
+    this->scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+    this->scoreW = scoreSurface->w;
+    this->scoreH = scoreSurface->h;
+
     SDL_Surface *actionSurface = TTF_RenderUTF8_Solid(
             font,
-            "Press SPACE to start",
+            "Press SPACE to play again",
             SDL_Color{255, 255, 255, 255});
 
     this->actionTexture = SDL_CreateTextureFromSurface(renderer, actionSurface);
@@ -22,18 +29,19 @@ Menu::Menu(SDL_Renderer *renderer)
     this->actionH = actionSurface->h;
 
     TTF_CloseFont(font);
+    SDL_FreeSurface(scoreSurface);
     SDL_FreeSurface(actionSurface);
 }
 
-void Menu::draw()
+void Score::draw()
 {
-    SDL_Rect tSrcRect = {0, 0, this->titleW, this->titleH};
-    SDL_Rect tDestRect = {(1280 - 400) / 2, 100, 400, 109};
+    SDL_Rect sSrcRect = {0, 0, this->scoreW, this->scoreH};
+    SDL_Rect sDestRect = {(1280 - this->scoreW) / 2, 100, this->scoreW, this->scoreH};
     SDL_RenderCopy(
             this->renderer,
-            this->titleTexture,
-            &tSrcRect,
-            &tDestRect);
+            this->scoreTexture,
+            &sSrcRect,
+            &sDestRect);
 
     SDL_Rect aSrcRect = {0, 0, this->actionW, this->actionH};
     SDL_Rect aDestRect = {(1280 - this->actionW) / 2, 300, this->actionW, this->actionH};
@@ -44,9 +52,9 @@ void Menu::draw()
             &aDestRect);
 }
 
-Menu::~Menu()
+Score::~Score()
 {
-    SDL_DestroyTexture(titleTexture);
-    SDL_DestroyTexture(actionTexture);
+    SDL_DestroyTexture(this->scoreTexture);
+    SDL_DestroyTexture(this->actionTexture);
     this->renderer = nullptr;
 }

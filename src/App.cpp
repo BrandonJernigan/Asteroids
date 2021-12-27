@@ -4,11 +4,21 @@
 #include <SDL_ttf.h>
 #include "Menu.h"
 #include "Game.h"
+#include "Score.h"
 
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
+bool running = false;
+Scene *activeScene;
+
+void onDeath(SDL_Renderer *renderer, int score)
+{
+    activeScene = nullptr;
+    activeScene = new Score(renderer, score);
+    running = false;
+}
 
 int main()
 {
@@ -17,6 +27,7 @@ int main()
     IMG_Init(IMG_INIT_PNG);
     TTF_Init();
 
+    // create the window and renderer
     SDL_Window *window = SDL_CreateWindow(
             "Asteroids C++",
             SDL_WINDOWPOS_UNDEFINED,
@@ -30,8 +41,9 @@ int main()
             -1,
             SDL_RENDERER_PRESENTVSYNC);
 
-    // the game scene
-    auto *game = new Game(renderer);
+    // load the scenes
+    auto *menu = new Menu(renderer);
+    activeScene = menu;
 
     SDL_Event event;
     bool quit = false;
@@ -46,11 +58,21 @@ int main()
             }
         }
 
+        if (!running)
+        {
+            const u_int8_t *state = SDL_GetKeyboardState(nullptr);
+            if (state[SDL_SCANCODE_SPACE]) {
+                activeScene = nullptr;
+                activeScene = new Game(renderer, onDeath);
+                running = true;
+            }
+        }
+
         // update and draw
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        game->update();
-        game->draw();
+        activeScene->update();
+        activeScene->draw();
         SDL_RenderPresent(renderer);
     }
 
