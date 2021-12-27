@@ -6,7 +6,6 @@
 #define ASTEROIDS_CPP_SCORE_H
 
 
-#include <iostream>
 #include <unistd.h>
 #include <string>
 #include <SDL.h>
