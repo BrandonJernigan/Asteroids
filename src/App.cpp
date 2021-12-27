@@ -13,6 +13,8 @@ const int SCREEN_HEIGHT = 720;
 bool running = false;
 Scene *activeScene;
 
+// function to be injected in the game scene for
+// loading score scene on player death
 void onDeath(SDL_Renderer *renderer, int score)
 {
     activeScene = nullptr;

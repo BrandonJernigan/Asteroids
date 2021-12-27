@@ -14,7 +14,6 @@
 
 const float B_SPEED = 5.0f;
 
-
 class Bullet : public GameObject {
 public:
     explicit Bullet(SDL_Renderer *renderer);
