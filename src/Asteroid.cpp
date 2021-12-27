@@ -26,7 +26,7 @@ Asteroid::Asteroid(SDL_Renderer *renderer)
     this->xPos = xDistribution(eng);
     this->yPos = yDistribution(eng);
 
-    std::uniform_real_distribution<float> velDistribution(-3, 3);
+    std::uniform_real_distribution<float> velDistribution(-2, 2 );
     this->xVel = velDistribution(eng);
     this->yVel = velDistribution(eng);
 

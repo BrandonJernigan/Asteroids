@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
+#include "Menu.h"
 #include "Game.h"
 
 
@@ -13,6 +15,7 @@ int main()
     // initialize SDL {image}
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG);
+    TTF_Init();
 
     SDL_Window *window = SDL_CreateWindow(
             "Asteroids C++",
