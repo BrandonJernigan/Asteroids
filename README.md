@@ -13,6 +13,7 @@ broken into components with the intention for easy project expansion.
 #### Application Specifications
 - C++ version 11
 - sdl2 version 2.0.18
+- CMake version 3.21
 - Apple clang version 13.0.0
 - macOS Monterey version 12.1
 
