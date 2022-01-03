@@ -32,11 +32,17 @@ Refer to this [link](https://www.libsdl.org/download-2.0.php) to download for yo
 ###### Edit the fonts path in the source code
 ```c++
 // Menu.cpp
-// Add the absolute path to the fonts directory
-14 TTF_Font *font = TTF_OpenFont("<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf", 24);
+
+16  /* Get the font using absolute path */
+17  TTF_Font *font = TTF_OpenFont(
+18          "<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf",
+19          24);
 ```
 ```c++
 // Score.cpp
-// Add the absolute path to the fonts directory
-10 TTF_Font *font = TTF_OpenFont("<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf", 24);
+
+11  /* Get the font using absolute path */
+12  TTF_Font *font = TTF_OpenFont(
+13          "<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf",
+14          24);
 ```
