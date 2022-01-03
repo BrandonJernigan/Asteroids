@@ -5,9 +5,7 @@
 #ifndef ASTEROIDS_CPP_SCENE_H
 #define ASTEROIDS_CPP_SCENE_H
 
-
 #include <SDL.h>
-
 
 class Scene {
 public:
@@ -17,6 +15,5 @@ public:
 protected:
     SDL_Renderer *renderer{};
 };
-
 
 #endif //ASTEROIDS_CPP_SCENE_H

@@ -7,11 +7,17 @@
 Menu::Menu(SDL_Renderer *renderer)
 {
     this->renderer = renderer;
+
+    /* Set the size based on the size of the image */
     this->titleW = 1085;
     this->titleH = 297;
     this->titleTexture = Utilities::loadTexture(renderer, "sprites/asteroids-logo.png");
 
-    TTF_Font *font = TTF_OpenFont("<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf", 24);
+    /* Get the font using absolute path */
+    TTF_Font *font = TTF_OpenFont(
+            "<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf",
+            24);
+
     SDL_Surface *actionSurface = TTF_RenderUTF8_Solid(
             font,
             "Press SPACE to start",
@@ -21,6 +27,7 @@ Menu::Menu(SDL_Renderer *renderer)
     this->actionW = actionSurface->w;
     this->actionH = actionSurface->h;
 
+    /* Clean up unneeded resources */
     TTF_CloseFont(font);
     SDL_FreeSurface(actionSurface);
 }

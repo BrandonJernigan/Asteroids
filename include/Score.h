@@ -5,13 +5,10 @@
 #ifndef ASTEROIDS_CPP_SCORE_H
 #define ASTEROIDS_CPP_SCORE_H
 
-
 #include <unistd.h>
 #include <string>
-#include <SDL.h>
 #include <SDL_ttf.h>
 #include "Scene.h"
-
 
 class Score : public Scene {
 public:
@@ -22,12 +19,11 @@ public:
 
 private:
     SDL_Renderer *renderer;
-    SDL_Texture *scoreTexture;
-    SDL_Texture *actionTexture;
+    SDL_Texture *scoreTexture;                          // Texture for the score text
+    SDL_Texture *actionTexture;                         // Texture for the call to action (play)
 
-    int scoreW, scoreH;
-    int actionW, actionH;
+    int scoreW, scoreH;                                 // Score texture width and height
+    int actionW, actionH;                               // Action texture width and height
 };
-
 
 #endif //ASTEROIDS_CPP_SCORE_H

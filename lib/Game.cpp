@@ -3,7 +3,6 @@
 //
 
 #include "Game.h"
-
 #include <utility>
 
 Game::Game(SDL_Renderer *renderer, std::function<void(SDL_Renderer*, int)> onDeath)
@@ -11,7 +10,6 @@ Game::Game(SDL_Renderer *renderer, std::function<void(SDL_Renderer*, int)> onDea
     this->renderer = renderer;
     this->score = 0;
     this->startTime = sclock::now();
-
 
     this->player = new Player(this->renderer);
     this->gameObjects.push_back(player);
@@ -82,7 +80,7 @@ void Game::checkCollisions()
 
     for (auto asteroid : this->asteroids)
     {
-        // delay for player collision on game start
+        /* Delay, to avoid player collision on game start */
         if (!(this->startTime + DELAY <= sclock::now()))
         {
             return;

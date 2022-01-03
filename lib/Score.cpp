@@ -7,7 +7,11 @@
 Score::Score(SDL_Renderer *renderer, int score)
 {
     this->renderer = renderer;
-    TTF_Font *font = TTF_OpenFont("<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf", 24);
+
+    /* Get the font using absolute path */
+    TTF_Font *font = TTF_OpenFont(
+            "<YOUR ABSOLUTE PATH HERE>/EncodeSansCondensed-Regular.ttf",
+            24);
 
     std::string scoreString = std::string("You scored: ") + std::to_string(score);
     SDL_Surface *scoreSurface = TTF_RenderUTF8_Solid(
@@ -28,6 +32,7 @@ Score::Score(SDL_Renderer *renderer, int score)
     this->actionW = actionSurface->w;
     this->actionH = actionSurface->h;
 
+    /* Clean up unneeded resources */
     TTF_CloseFont(font);
     SDL_FreeSurface(scoreSurface);
     SDL_FreeSurface(actionSurface);

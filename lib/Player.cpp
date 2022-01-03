@@ -7,33 +7,36 @@
 
 Player::Player(SDL_Renderer *renderer)
 {
-    // set object state
+    /* Set the object state */
     this->renderer = renderer;
     this->active = true;
 
-    // set the rotation
+    /* Set the initial rotation angle and velocity */
     this->rAngle = 0.0f;
     this->rVel = 0.0f;
 
-    // set the size and axis
+    /* Set the size based on the image size */
     this->width = 26.0f;
     this->height = 32.0f;
+
+    /* Calculate the center axis */
     this->center = {this->width / 2.0f, this->height / 2.0f};
 
-    // set position based on screen size
+    /* Set the position in the middle of the screen */
     int screenW, screenH = 0;
     SDL_GetRendererOutputSize(this->renderer, &screenW, &screenH);
     this->xPos = ((float)screenW - this->width) / 2.0f;
     this->yPos = ((float)screenH - this->height) / 2.0f;
+
     this->xVel = 0.0f;
     this->yVel = 0.0f;
 
-    // set the textures; based on state
+    /* Texture is based on thrusting state */
     this->thrusting = false;
     this->idleTex =  Utilities::loadTexture(renderer, "sprites/player-idle.png");
     this->thrustingTex = Utilities::loadTexture(renderer, "sprites/player-thrusting.png");
 
-    // initialize bullet state and array; object pooling
+    /* Initialize bullet pool; object pooling */
     for(auto & i : this->bullets)
     {
         auto *bullet = new Bullet(renderer);
@@ -55,6 +58,7 @@ void Player::drawBullets()
 
 void Player::draw()
 {
+    /* Determine thrusting state & draw accordingly */
     float h = this->thrusting ? this->height + 13 : this->height;
     SDL_Texture *tex = this->thrusting ? this->thrustingTex : this->idleTex;
 
@@ -117,7 +121,7 @@ void Player::handleKeyEvents()
 {
     const u_int8_t *state = SDL_GetKeyboardState(nullptr);
 
-    // rotation events
+    /* Rotation events */
     if (state[SDL_SCANCODE_A]) {
         this->rVel -= R_SPEED;
     }
@@ -126,13 +130,13 @@ void Player::handleKeyEvents()
         this->rVel += R_SPEED;
     }
 
-    // shooting event
+    /* Shooting event */
     if (state[SDL_SCANCODE_SPACE])
     {
         this->shoot();
     }
 
-    // thrust event
+    /* Thrust event */
     if (state[SDL_SCANCODE_W]) {
         this->thrusting = true;
         this->xVel += sinf(rAngle * RADIAN_EQ) * T_SPEED;

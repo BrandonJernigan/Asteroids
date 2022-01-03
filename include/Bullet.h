@@ -5,12 +5,8 @@
 #ifndef ASTEROIDS_CPP_BULLET_H
 #define ASTEROIDS_CPP_BULLET_H
 
-
-#include <SDL.h>
-#include <SDL_image.h>
 #include "GameObject.h"
 #include "Utilities.h"
-
 
 const float B_SPEED = 5.0f;
 
@@ -19,9 +15,9 @@ public:
     explicit Bullet(SDL_Renderer *renderer);
     ~Bullet();
 
-    void draw() override;
-    void update() override;
-    void onCollision() override;
+    void draw() override;                           // GameObject draw method
+    void update() override;                         // GameObject update method
+    void onCollision() override;                    // GameObject collision handler
 };
 
 

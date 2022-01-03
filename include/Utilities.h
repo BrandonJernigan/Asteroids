@@ -8,9 +8,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-
-const float RADIAN_EQ = 0.0174533;
-
+const float RADIAN_EQ = 0.0174533;                 // Conversion factor for rotation; degrees to radians
 
 class Utilities {
 public:

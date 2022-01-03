@@ -6,68 +6,76 @@
 
 Asteroid::Asteroid(SDL_Renderer *renderer)
 {
-    // random engine
+    /* Random engine for generating random numbers */
     std::random_device rd;
     std::default_random_engine eng(rd());
 
-    // set object state
-    this->renderer = renderer;
-    this->active = true;
+    /* Asteroid phase */
     this->phase = 1;
 
-    // set the rotation
-    this->rAngle = 0.0f;
-    this->rVel = 0.5f;
-
-    // position based on random value between 0 and screen width for x,
-    // 0 and screen height for y
+    /* Set the starting position based on random value, within the screen */
     std::uniform_real_distribution<float> xDistribution(0, (1280 - this->width));
     std::uniform_real_distribution<float> yDistribution(0, (720 - this->height));
     this->xPos = xDistribution(eng);
     this->yPos = yDistribution(eng);
 
+    /* Set the starting velocity based on random value, within -2 and 2 */
     std::uniform_real_distribution<float> velDistribution(-2, 2 );
     this->xVel = velDistribution(eng);
     this->yVel = velDistribution(eng);
 
-    // set size and axis
+    /* Set the size based on image size */
     this->width = 133;
     this->height = 143;
-    this->center = {this->width / 2.0f, this->height / 2.0f};
 
-    // set the texture
+    /* Set the object textures for both phases */
     this->phaseOneTex = Utilities::loadTexture(renderer, "sprites/asteroid-1.png");
     this->phaseTwoTex = Utilities::loadTexture(renderer, "sprites/asteroid-2.png");
+
+    /* General setup for Asteroid object */
+    setupAsteroid(renderer);
 }
 
 Asteroid::Asteroid(SDL_Renderer *renderer, float xPos, float yPos, float xVel, float yVel)
 {
-    // set object state
-    this->renderer = renderer;
-    this->active = true;
+    /* Asteroid phase */
     this->phase = 2;
 
-    // set the rotation
-    this->rAngle = 0.0f;
-    this->rVel = 0.5f;
-
-    // set the position
+    /* Set the position manually */
     this->xPos = xPos;
     this->yPos = yPos;
     this->xVel = xVel;
     this->yVel = yVel;
 
-    // set size and axis
+    /* Set the size based on image size */
     this->width = 97;
     this->height = 73;
     this->center = {this->width / 2.0f, this->height / 2.0f};
 
-    // set the texture
+    /* Set the object textures for this phase */
     this->phaseTwoTex = Utilities::loadTexture(renderer, "sprites/asteroid-2.png");
+
+    /* General setup for Asteroid object */
+    setupAsteroid(renderer);
+}
+
+void Asteroid::setupAsteroid(SDL_Renderer *renderer)
+{
+    /* Set the object state */
+    this->renderer = renderer;
+    this->active = true;
+
+    /* Set the initial rotation and rotation velocity */
+    this->rAngle = 0.0f;
+    this->rVel = 0.5f;
+
+    /* Calculate the center axis */
+    this->center = {this->width / 2.0f, this->height / 2.0f};
 }
 
 void Asteroid::draw()
 {
+    /* Don't draw the object if it isn't active */
     if(!this->active)
     {
         return;
@@ -75,6 +83,7 @@ void Asteroid::draw()
 
     SDL_Texture *tex = this->phase == 1 ? this->phaseOneTex : this->phaseTwoTex;
 
+    /* Using FRect and CopyExF since we are using rotation values */
     SDL_Rect srcRect = {0, 0, (int)this->width, (int)this->height};
     SDL_FRect destRect = {this->xPos, this->yPos, this->width, this->height};
     SDL_RenderCopyExF(
