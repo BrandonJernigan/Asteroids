@@ -14,7 +14,7 @@ using sclock = std::chrono::system_clock;
 
 const float R_SPEED = 0.1f;                                // Rotation speed
 const float T_SPEED = 0.08f;                               // Thrust speed
-const auto COOLDOWN = std::chrono::milliseconds(500);   // Cooldown time between shots
+const auto COOLDOWN = std::chrono::milliseconds(500);      // Cooldown time between shots
 
 class Player : public GameObject {
 public:

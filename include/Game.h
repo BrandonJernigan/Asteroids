@@ -13,7 +13,7 @@
 #include "Asteroid.h"
 #include "Utilities.h"
 
-const auto DELAY = std::chrono::seconds(2);                                     // Collision detection delay, to prevent player death on start
+const auto DELAY = std::chrono::seconds(2);                                         // Collision detection delay, to prevent player death on start
 
 using sclock = std::chrono::system_clock;
 

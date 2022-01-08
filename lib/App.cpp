@@ -18,8 +18,8 @@ void onDeath(SDL_Renderer *renderer, int score)                             // P
 
 int main()
 {
-    SDL_Init(SDL_INIT_EVERYTHING);                                    // Initialize SDL
-    IMG_Init(IMG_INIT_PNG);                                           // Initialize SDL_Image
+    SDL_Init(SDL_INIT_EVERYTHING);                                          // Initialize SDL
+    IMG_Init(IMG_INIT_PNG);                                                 // Initialize SDL_Image
     TTF_Init();                                                             // Initialize SDL_TTF
 
     SDL_Window *window = SDL_CreateWindow(                                  // Create SDL window
@@ -28,12 +28,12 @@ int main()
             SDL_WINDOWPOS_UNDEFINED,
             SCREEN_WIDTH,
             SCREEN_HEIGHT,
-            SDL_WINDOW_OPENGL);                                       // Use OpenGL window flag
+            SDL_WINDOW_OPENGL);                                             // Use OpenGL window flag
 
     SDL_Renderer *renderer = SDL_CreateRenderer(                            // Create SDL renderer
             window,
             -1,
-            SDL_RENDERER_PRESENTVSYNC);                               // Synchronize with refresh rate
+            SDL_RENDERER_PRESENTVSYNC);                                     // Synchronize with refresh rate
 
     auto *menu = new Menu(renderer);                                        // Load menu scene
     activeScene = menu;                                                     // Set menu scene as active scene to start
@@ -42,7 +42,7 @@ int main()
     bool quit = false;                                                      // Boolean for program loop
     while (!quit)
     {
-        while (SDL_PollEvent(&event))                                 // Poll for quit event
+        while (SDL_PollEvent(&event))                                       // Poll for quit event
         {
             if (event.type == SDL_QUIT)
             {
@@ -52,7 +52,7 @@ int main()
 
         if (!running)
         {
-            const u_int8_t *state = SDL_GetKeyboardState(nullptr); // Get any key presses
+            const u_int8_t *state = SDL_GetKeyboardState(nullptr);          // Get any key presses
             if (state[SDL_SCANCODE_SPACE]) {                                // Allow for SPACE bar press to trigger game start
                 activeScene = nullptr;                                      // Remove reference to current active scene
                 activeScene = new Game(renderer, onDeath);                  // Set the new active scene to game scene
@@ -61,7 +61,7 @@ int main()
         }
 
         SDL_RenderClear(renderer);                                          // Clear the renderer
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);         // Repaint the renderer with the color black
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);                     // Repaint the renderer with the color black
         activeScene->update();                                              // Update the active scene
         activeScene->draw();                                                // Draw the active scene and it's objects
         SDL_RenderPresent(renderer);                                        // Present the renderer's state
